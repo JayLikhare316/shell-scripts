@@ -3,9 +3,20 @@
 
 set -e
 
+# Check for broken installation and fix
+check_broken_install() {
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        echo "Checking for broken packages..."
+        sudo apt-get install -f -y
+        sudo dpkg --configure -a
+    fi
+}
+
 # Detect OS
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Installing on Linux..."
+    # Fix any broken installations first
+    check_broken_install
     # Update package index
     sudo apt update
     # Install curl and Node.js 20
